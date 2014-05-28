@@ -1,7 +1,7 @@
 :e src/main.cpp
 
-:tabnew src/heat.cpp
-:60 vs include/heat.h
+:tabnew src/schrodinger.cpp
+:60 vs include/schrodinger.h
 
 :tabnew src/grid.cpp
 :60 vs include/grid.h

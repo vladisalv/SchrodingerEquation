@@ -11,7 +11,7 @@ VERSION        = DEBUG
 VERSION_NUMBER = 0.0.1
 
 # имя бинарника
-PROG_NAME = HeatEquation
+PROG_NAME = SchrodingerEquation
 
 # компилятор
 CC = g++

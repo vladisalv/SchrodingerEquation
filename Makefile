@@ -2,7 +2,7 @@
 # Version: 1.0                                                                 #
 # Last update: 25.05.2014                                                      #
 #                                                                              #
-# Makefile для проекта HeatEquation                                            #
+# Makefile для проекта SchrodingerEquation                                     #
 #                                                                              #
 # !!!!!!!!!!!!!!!!!!!!!!! ВАЖНО !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
 #                                                                              #
