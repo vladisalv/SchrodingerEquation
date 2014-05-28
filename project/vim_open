@@ -1,0 +1,19 @@
+:e src/main.cpp
+
+:tabnew src/heat.cpp
+:60 vs include/heat.h
+
+:tabnew src/grid.cpp
+:60 vs include/grid.h
+
+:tabnew src/options.cpp
+:60 vs include/options.h
+
+:tabnew src/definition_func.cpp
+:60 vs include/definition_func.h
+
+:tabnew Makefile
+:60 vs config.mk
+:30 vs include/types.h
+
+gt
