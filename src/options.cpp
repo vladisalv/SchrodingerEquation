@@ -15,7 +15,6 @@ Options::Options(int argc, char *argv[])
 #endif
     only_help = only_version = error_mode = false;
     program_name = argv[0];
-    explicit_scheme = implicit_scheme = false;
     left = 0;
     right = 1;
     time = 1;
@@ -53,12 +52,6 @@ void Options::parse(int argc, char *argv[])
         case 'v':
             only_version = true;
             break;
-        case 'e':
-            explicit_scheme = true;
-            break;
-        case 'i':
-            implicit_scheme = true;
-            break;
         case 'l':
             left = atof(optarg);
             break;
@@ -86,8 +79,6 @@ void Options::parse(int argc, char *argv[])
 
 void Options::check()
 {
-    if (!explicit_scheme && !implicit_scheme)
-        error_mode = true;
 }
 
 void Options::helpAndExit()
@@ -98,14 +89,10 @@ void Options::helpAndExit()
 
 void Options::help()
 {
-    printf("Usage: %s -e | -i [OPTION]...\n", program_name);
-    printf("Program solve equation of heat used explicit or implicit scheme\n");
+    printf("Usage: %s [OPTION]...\n", program_name);
+    printf("Program solve equation of schrodinger equation\n");
     printf("\n");
-    printf("  One of this option must be present:\n");
-    printf("      -e,    use explicit scheme\n");
-    printf("      -i,    use implicit scheme\n");
-    printf("\n");
-    printf("  Additional options:\n");
+    printf("  Options:\n");
     printf("      -l,    set left boundary of x\n");
     printf("      -r,    set right boundary of x\n");
     printf("      -t,    set time\n");
@@ -126,16 +113,6 @@ bool Options::isErrorMode()
 }
 
 /* ========================================================================== */
-
-bool Options::isExplicitScheme()
-{
-    return explicit_scheme;
-}
-
-bool Options::isImplicitScheme()
-{
-    return implicit_scheme;
-}
 
 double Options::getLeftBoundary()
 {

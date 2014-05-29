@@ -1,5 +1,4 @@
 # опции. Их можно изменять при запуске: make run N=4 X=100 Z=100 S=500 D=0.2
-S = i
 L = 0
 R = 1
 t = 1
@@ -15,3 +14,6 @@ PROG_NAME = SchrodingerEquation
 
 # компилятор
 CC = g++
+
+# программа для просмотра gif
+GIFPROG = gifview

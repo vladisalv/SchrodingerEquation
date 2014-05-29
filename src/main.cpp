@@ -8,20 +8,14 @@ int main(int argc, char *argv[])
         options.helpAndExit();
 
     Schrodinger schrodingerEquation(options.getLeftBoundary(),
-                      options.getRightBoundary(),
-                      options.getTime(),
-                      options.getTimeStep(),
-                      options.getCoordStep()
+                                    options.getRightBoundary(),
+                                    options.getTime(),
+                                    options.getTimeStep(),
+                                    options.getCoordStep()
                      );
 
-    if (options.isExplicitScheme()) {
-        schrodingerEquation.solveEquation();
-        schrodingerEquation.writePlot();
-    }
-    if (options.isImplicitScheme()) {
-        schrodingerEquation.solveEquation();
-        schrodingerEquation.writePlot();
-    }
+    schrodingerEquation.solveEquation();
+    schrodingerEquation.writePlot();
 
     return 0;
 }

@@ -14,62 +14,63 @@ void Schrodinger::solveEquation()
 {
     initGrid();
 
-    /*
-    if (type == 'e') {
-        cout << "explicit_scheme" << endl;
-        double gamma = time_step / (10 * coor_step * coor_step);
-        for (int t = 1; t < gridRow; t++) {
-            (*grid)[t][0] = leftBoundaryFunction(t * time_step);
-            (*grid)[t][gridCol - 1] = rightBoundaryFunction(t * time_step);
-            for (int x = 1; x < gridCol - 1; x++)
-                (*grid)[t][x] = (*grid)[t-1][x]
-                              + gamma * ((*grid)[t-1][x-1] - 2 * (*grid)[t-1][x] + (*grid)[t-1][x+1])
-                              + gamma * time_step * heatFunction(left + x * coor_step, t * time_step);
+    cout << "schrodinger equation" << endl;
+
+    double gamma = time_step / (coor_step * coor_step);
+    grid_t g(0, -gamma / 2);
+    grid_t im_time(0, time_step), im_gamma(1, gamma);
+
+    for (int t = 1; t < gridRow; t++) {
+        (*grid)[t][0] = leftBoundaryFunction(t * time_step);
+        (*grid)[t][gridCol - 1] = rightBoundaryFunction(t * time_step);
+
+        vector< grid_t > c(gridCol - 2, 0), f(gridCol - 2, 0);
+
+        for (int x = 0; x < gridCol - 2; x++)
+            c[x] = im_gamma - im_time * schrodingerFunction(left + (x + 1) * coor_step,
+                                                                       t   * time_step);
+        f[0] = -g * (*grid)[t][0];
+        f[gridCol - 3] = -g * (*grid)[t][gridCol - 1];
+
+        for (int x = 0; x < gridCol - 2; x++)
+            f[x] += (*grid)[t - 1][x + 1];
+
+        for (int x = 1; x < gridCol - 2; x++) {
+            c[x] -= g * g / c[x - 1];
+            f[x] -= g * f[x - 1] / c[x - 1];
         }
-    } else if (type == 'i') {
-        cout << "implicit_scheme" << endl;
-        double gamma = time_step / (coor_step * coor_step);
-        for (int t = 1; t < gridRow; t++) {
-            (*grid)[t][0] = leftBoundaryFunction(t * time_step);
-            (*grid)[t][gridCol - 1] = rightBoundaryFunction(t * time_step);
 
-            vector< grid_t > a(gridCol - 2, 0), b(gridCol - 2, 1 + 2 * gamma);
-
-            a[0] = gamma * (*grid)[t][0];
-            a[gridCol - 3] = gamma * (*grid)[t][gridCol - 1];
-            for (int x = 0; x < gridCol - 2; x++)
-                a[x] += (*grid)[t - 1][x + 1]
-                     + time_step * heatFunction(left + (x + 1) * coor_step,
-                                                            t * time_step);
-
-            for (int x = 1; x < gridCol - 2; x++) {
-                b[x] -= gamma * gamma / b[x - 1];
-                a[x] -= -gamma * a[x - 1] / b[x - 1];
-            }
-
-            (*grid)[t][gridCol - 2] = a[gridCol - 3] / b[gridCol - 3];
-            for (int x = gridCol - 3; x > 0; x--)
-                (*grid)[t][x] = (a[x - 1] + gamma * (*grid)[t][x + 1]) / b[x - 1];
-        }
+        (*grid)[t][gridCol - 2] = f[gridCol - 3] / c[gridCol - 3];
+        for (int x = gridCol - 3; x > 0; x--)
+            (*grid)[t][x] = (f[x - 1] - g * (*grid)[t][x + 1]) / c[x - 1];
     }
-    */
 }
 
 void Schrodinger::writePlot()
 {
-    grid_t min, max;
-    min = max = (*grid)[0][0];
+    double min, max;
+    min = max = (*grid)[0][0].real();
 
     ofstream data("result/data");
     for (int x = 0; x < gridCol; x++) {
         data << left + x * coor_step << " ";
         for (int t = 0; t < gridRow; t++) {
             grid_t tmp = (*grid)[t][x];
-            if (tmp > max)
-                max = tmp;
-            if (tmp < min)
-                min = tmp;
-            data << tmp << " ";
+            if (tmp.real() > max)
+                max = tmp.real();
+            if (tmp.imag() > max)
+                max = tmp.imag();
+            if (abs(tmp) > max)
+                max = abs(tmp);
+            if (tmp.real() < min)
+                min = tmp.real();
+            if (tmp.imag() < min)
+                min = tmp.imag();
+            if (abs(tmp) < min)
+                min = abs(tmp);
+            data << tmp.real() << " ";
+            data << tmp.imag() << " ";
+            data << abs(tmp)   << " ";
         }
         data << endl;
     }
@@ -89,7 +90,12 @@ void Schrodinger::writePlot()
     plot << "progress = 0" << endl;
     plot << "total = " << gridRow + 1 << endl;
     plot << "do for [i = 2 : total] {" << endl;
-    plot << "    plot 'result/data' using 1:i w li lw 3 lt rgb 'purple'" << endl;
+    plot << "    real = 3 * (i - 2) + 2" << endl;
+    plot << "    imag = 3 * (i - 2) + 3" << endl;
+    plot << "    abs  = 3 * (i - 2) + 4" << endl;
+    plot << "    plot 'result/data' using 1:real w li lw 3 lt rgb 'blue', ";
+    plot <<     "'result/data' using 1:imag w li lw 3 lt rgb 'green', ";
+    plot <<     "'result/data' using 1:abs  w li lw 3 lt rgb 'red'" << endl;
     plot << "}" << endl;
     plot.close();
 

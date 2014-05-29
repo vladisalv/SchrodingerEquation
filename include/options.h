@@ -9,7 +9,6 @@ class Options {
     char version_name[50], version_number[15];
     bool only_help, only_version, error_mode;
     char *program_name;
-    bool explicit_scheme, implicit_scheme;
     double left, right, time, time_step, coor_step;
 
     void parse(int argc, char *argv[]);
@@ -25,8 +24,6 @@ public:
 
     bool isErrorMode();
 
-    bool isExplicitScheme();
-    bool isImplicitScheme();
     double getLeftBoundary();
     double getRightBoundary();
     double getTime();
