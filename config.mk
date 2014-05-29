@@ -7,7 +7,7 @@ c = 0.02
 
 # версия DEBUG или RELEASE
 VERSION        = DEBUG
-VERSION_NUMBER = 0.0.1
+VERSION_NUMBER = 0.0.2
 
 # имя бинарника
 PROG_NAME = SchrodingerEquation
